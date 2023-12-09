@@ -38,22 +38,23 @@ class _ChatScreenState extends State<ChatScreen> {
             );
           }
           return ListView.builder(
-              itemCount: snapshot.data!.docs.length,
-              itemBuilder: (context, index) {
-                dynamic map = snapshot.data!.docs[index];
-                return map['uid'] != auth.currentUser!.uid
-                    ? ListTile(
-                        onTap: () => Get.to(
-                          () => ChatPage(
-                            uid: map['uid'],
-                          ),
+            itemCount: snapshot.data!.docs.length,
+            itemBuilder: (context, index) {
+              dynamic map = snapshot.data!.docs[index];
+              return map['uid'] != auth.currentUser!.uid
+                  ? ListTile(
+                      onTap: () => Get.to(
+                        () => ChatPage(
+                          uid: map['uid'],
                         ),
-                        title: Text(
-                          map['username'],
-                        ),
-                      )
-                    : const SizedBox();
-              });
+                      ),
+                      title: Text(
+                        map['name'],
+                      ),
+                    )
+                  : const SizedBox();
+            },
+          );
         },
       ),
     );

@@ -11,19 +11,17 @@ class FirebaseProvider extends ChangeNotifier {
   UserModel? user;
   List<Message> messages = [];
 
-  // List<UserModel> getAllUsers() {
-  //   FirebaseFirestore.instance
-  //       .collection('users')
-  //       .orderBy('lastActive', descending: true)
-  //       .snapshots(includeMetadataChanges: true)
-  //       .listen((users) {
-  //     this.users = users.docs
-  //         .map((doc) => UserModel.fromJson(doc.data()))
-  //         .toList();
-  //     notifyListeners();
-  //   });
-  //   return users;
-  // }
+  List<UserModel> getAllUsers() {
+    FirebaseFirestore.instance
+        .collection('users')
+        .snapshots(includeMetadataChanges: true)
+        .listen((users) {
+      this.users =
+          users.docs.map((doc) => UserModel.fromJson(doc.data())).toList();
+      notifyListeners();
+    });
+    return users;
+  }
 
   UserModel? getUserById(String userId) {
     FirebaseFirestore.instance

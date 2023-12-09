@@ -42,7 +42,7 @@ class _SignUpScreenPageState extends State<SignUpScreenPage> {
       setState(() {
         _isLoading = false;
       });
-      Get.off(() => const ChatScreen());
+      Get.offAll(() => const ChatScreen());
       showSnackBar("Welcome $userName", context);
     }
   }
