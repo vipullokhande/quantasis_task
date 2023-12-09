@@ -42,7 +42,7 @@ class FirebaseProvider extends ChangeNotifier {
         .collection('chat')
         .doc(receiverId)
         .collection('messages')
-        .orderBy('sentTime', descending: false)
+        .orderBy('sentTime', descending: true)
         .snapshots(includeMetadataChanges: true)
         .listen((messages) {
       this.messages =
