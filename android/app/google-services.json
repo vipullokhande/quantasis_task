@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "829061706001",
+    "project_id": "quantasis-task",
+    "storage_bucket": "quantasis-task.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:829061706001:android:c29f4d1f56a288dcd31cb0",
+        "android_client_info": {
+          "package_name": "com.example.quantasis_task"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAgR9A_N1ho6L5m3Khvk9DMahv0hOoZpw4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
