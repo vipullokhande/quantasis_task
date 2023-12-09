@@ -17,19 +17,26 @@ class _ChatScreenState extends State<ChatScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        leading: IconButton(
-          onPressed: () async {
-            await auth.signOut();
-            Get.offAll(
-              const LoginScreenPage(),
-            );
-          },
-          icon: const Icon(Icons.logout),
-        ),
+        actions: [
+          IconButton(
+            onPressed: () async {
+              await auth.signOut();
+              Get.offAll(
+                const LoginScreenPage(),
+              );
+            },
+            icon: const Icon(Icons.logout),
+          ),
+        ],
       ),
       body: StreamBuilder(
         stream: FirebaseFirestore.instance.collection('users').snapshots(),
         builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const Center(
+              child: CircularProgressIndicator(),
+            );
+          }
           return ListView.builder(
               itemCount: snapshot.data!.docs.length,
               itemBuilder: (context, index) {

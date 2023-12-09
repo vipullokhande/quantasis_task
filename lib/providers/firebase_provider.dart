@@ -10,21 +10,20 @@ class FirebaseProvider extends ChangeNotifier {
   List<UserModel> users = [];
   UserModel? user;
   List<Message> messages = [];
-  List<UserModel> search = [];
 
-  List<UserModel> getAllUsers() {
-    FirebaseFirestore.instance
-        .collection('users')
-        .orderBy('lastActive', descending: true)
-        .snapshots(includeMetadataChanges: true)
-        .listen((users) {
-      this.users = users.docs
-          .map((doc) => UserModel.fromJson(doc.data()))
-          .toList();
-      notifyListeners();
-    });
-    return users;
-  }
+  // List<UserModel> getAllUsers() {
+  //   FirebaseFirestore.instance
+  //       .collection('users')
+  //       .orderBy('lastActive', descending: true)
+  //       .snapshots(includeMetadataChanges: true)
+  //       .listen((users) {
+  //     this.users = users.docs
+  //         .map((doc) => UserModel.fromJson(doc.data()))
+  //         .toList();
+  //     notifyListeners();
+  //   });
+  //   return users;
+  // }
 
   UserModel? getUserById(String userId) {
     FirebaseFirestore.instance
@@ -48,9 +47,8 @@ class FirebaseProvider extends ChangeNotifier {
         .orderBy('sentTime', descending: false)
         .snapshots(includeMetadataChanges: true)
         .listen((messages) {
-      this.messages = messages.docs
-          .map((doc) => Message.fromJson(doc.data()))
-          .toList();
+      this.messages =
+          messages.docs.map((doc) => Message.fromJson(doc.data())).toList();
       notifyListeners();
 
       scrollDown();
@@ -58,11 +56,9 @@ class FirebaseProvider extends ChangeNotifier {
     return messages;
   }
 
-  void scrollDown() =>
-      WidgetsBinding.instance.addPostFrameCallback((_) {
+  void scrollDown() => WidgetsBinding.instance.addPostFrameCallback((_) {
         if (scrollController.hasClients) {
-          scrollController.jumpTo(
-              scrollController.position.maxScrollExtent);
+          scrollController.jumpTo(scrollController.position.maxScrollExtent);
         }
       });
 }

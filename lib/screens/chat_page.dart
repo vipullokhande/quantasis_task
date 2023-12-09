@@ -18,20 +18,32 @@ class ChatPage extends StatefulWidget {
 class _ChatPageState extends State<ChatPage> {
   final auth = FirebaseAuth.instance;
   var chatController = TextEditingController();
+  bool isLoading = false;
   @override
   void initState() {
+    setState(() {
+      isLoading = true;
+    });
     Provider.of<FirebaseProvider>(context, listen: false)
       ..getUserById(widget.uid)
       ..getMessages(widget.uid);
+    setState(() {
+      isLoading = false;
+    });
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Consumer<FirebaseProvider>(
-        builder: (context, value, child) {
-          return Column(
+    return Consumer<FirebaseProvider>(
+      builder: (context, value, child) {
+        return Scaffold(
+          backgroundColor: const Color.fromARGB(255, 239, 239, 239),
+          appBar: AppBar(
+            backgroundColor: const Color.fromARGB(255, 239, 239, 239),
+            toolbarHeight: 10,
+          ),
+          body: Column(
             children: [
               Expanded(
                 child: ListView.builder(
@@ -39,42 +51,42 @@ class _ChatPageState extends State<ChatPage> {
                     scrollDirection: Axis.vertical,
                     itemCount: value.messages.length,
                     itemBuilder: (context, index) {
-                      return Align(
-                        alignment: widget.uid != value.messages[index].senderId
+                      return Container(
+                        alignment: widget.uid == value.messages[index].senderId
                             ? Alignment.topLeft
                             : Alignment.topRight,
-                        child: Container(
-                          decoration: BoxDecoration(
-                            color: widget.uid != value.messages[index].senderId
-                                ? Colors.blue
-                                : Colors.grey,
-                            borderRadius:
-                                widget.uid != value.messages[index].senderId
-                                    ? const BorderRadius.only(
-                                        topRight: Radius.circular(18),
-                                        bottomRight: Radius.circular(18),
-                                        topLeft: Radius.circular(18),
-                                      )
-                                    : const BorderRadius.only(
-                                        topRight: Radius.circular(18),
-                                        bottomLeft: Radius.circular(18),
-                                        topLeft: Radius.circular(18),
-                                      ),
-                          ),
-                          margin: const EdgeInsets.only(
-                              top: 10, right: 10, left: 10),
-                          padding: const EdgeInsets.all(10),
-                          child: Column(
-                            mainAxisSize: MainAxisSize.min,
-                            crossAxisAlignment:
-                                widget.uid != value.messages[index].senderId
-                                    ? CrossAxisAlignment.start
-                                    : CrossAxisAlignment.end,
-                            children: [
-                              Text(value.messages[index].content,
-                                  style: const TextStyle(color: Colors.white)),
-                            ],
-                          ),
+                        margin: const EdgeInsets.symmetric(
+                            horizontal: 7, vertical: 5),
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 10, vertical: 3),
+                        child: Column(
+                          crossAxisAlignment:
+                              widget.uid == value.messages[index].senderId
+                                  ? CrossAxisAlignment.start
+                                  : CrossAxisAlignment.end,
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            SizedBox(
+                              width: MediaQuery.of(context).size.width * 0.8,
+                              child: Text(
+                                value.messages[index].content,
+                                maxLines: 20,
+                                textAlign:
+                                    widget.uid == value.messages[index].senderId
+                                        ? TextAlign.start
+                                        : TextAlign.end,
+                                overflow: TextOverflow.ellipsis,
+                                style: TextStyle(
+                                  color: widget.uid ==
+                                          value.messages[index].senderId
+                                      ? Colors.green
+                                      : Colors.red,
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 22,
+                                ),
+                              ),
+                            ),
+                          ],
                         ),
                       );
                     }),
@@ -86,7 +98,7 @@ class _ChatPageState extends State<ChatPage> {
                   ),
                   Expanded(
                     child: SizedBox(
-                      height: 55,
+                      height: 60,
                       child: TextField(
                         controller: chatController,
                         decoration: const InputDecoration(
@@ -115,12 +127,7 @@ class _ChatPageState extends State<ChatPage> {
                           text: chatController.text,
                         );
                         chatController.clear();
-                        // ignore: use_build_context_synchronously
-                        FocusScope.of(context).unfocus();
                       }
-                      // ignore: use_build_context_synchronously
-                      FocusScope.of(context).unfocus();
-                      setState(() {});
                     },
                     icon: const Icon(
                       Icons.send,
@@ -130,9 +137,9 @@ class _ChatPageState extends State<ChatPage> {
                 ],
               ),
             ],
-          );
-        },
-      ),
+          ),
+        );
+      },
     );
   }
 }
